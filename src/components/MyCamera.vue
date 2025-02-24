@@ -11,7 +11,7 @@
                 <button @click="changeCamera" class="captureBtn">🔄</button>
             </div>
             <div v-if="photoCaptured && !photoApproved" class="action-buttons">
-                <button @click="approvePhoto" class="actionBtn">✅</button>
+                <button @click="downloadPhoto" class="actionBtn">⬇️</button>
                 <button @click="retakePhoto" class="actionBtn">🔄</button>
             </div>
         </div>
@@ -40,7 +40,7 @@ const drawVideo = () => {
 
 const startCamera = async () => {
     try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode.value }, audio: false });
         video.value.srcObject = mediaStream;
         video.value.play();
         drawVideo();
@@ -61,8 +61,11 @@ const stopCamera = () => {
     if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
 };
 
-const approvePhoto = () => {
-    photoApproved.value = true;
+const downloadPhoto = () => {
+    const link = document.createElement('a');
+    link.href = photoCanvas.value.toDataURL('image/png');
+    link.download = 'photo.png';
+    link.click();
 };
 
 const retakePhoto = () => {
@@ -133,7 +136,7 @@ onUnmounted(() => stopCamera());
     display: flex;
     gap: 20px;
     position: absolute;
-    bottom: calc(120px + env(safe-area-inset-bottom, 0));
+    bottom: calc(50px + env(safe-area-inset-bottom, 0));
     
 }
 
@@ -141,7 +144,7 @@ onUnmounted(() => stopCamera());
     display: flex;
     gap: 20px;
     position: absolute;
-    bottom: calc(120px + env(safe-area-inset-bottom, 0));
+    bottom: calc(50px + env(safe-area-inset-bottom, 0));
 }
 
 .actionBtn {
@@ -155,12 +158,12 @@ onUnmounted(() => stopCamera());
 }
 
 @media (orientation: landscape) {
-    .captureBtn {
-        bottom: calc(10px + env(safe-area-inset-bottom, 0));
+    .photo-buttons {
+        bottom: calc(50px + env(safe-area-inset-bottom, 0));
     }
 
     .action-buttons {
-        bottom: calc(80px + env(safe-area-inset-bottom, 0));
+        bottom: calc(50px + env(safe-area-inset-bottom, 0));
     }
 }
 </style>
