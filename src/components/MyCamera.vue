@@ -2,9 +2,9 @@
     <div class="container">
         <video ref="video" autoplay playsinline class="media" style="display: none;"></video>
         <canvas v-show="!photoCaptured" ref="videoCanvas" class="media"
-            :class="{ mirror: !isUserFacingCamera }"></canvas>
+            :class="{ mirror: isUserFacingCamera }"></canvas>
         <canvas v-show="photoCaptured" ref="photoCanvas" class="media"
-            :class="{ mirror: !isUserFacingCamera }"></canvas>
+            :class="{ mirror: isUserFacingCamera }"></canvas>
         <div class="buttons">
             <div v-if="!photoCaptured" class="photo-buttons">
                 <button @click="capturePhoto" class="captureBtn">📸</button>
