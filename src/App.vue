@@ -3,7 +3,7 @@ import MyCamera from './components/MyCamera.vue';
 </script>
 
 <template>
-  <MyCamera title="Camera webRTC" />
+  <MyCamera title="Camera" />
 </template>
 
 <style scoped>

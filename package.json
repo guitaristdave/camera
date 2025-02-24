@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "vite build && gh-pages -d dist",
-    "update": "git add . && git commit -m \"$1\" && git push origin main && npm run deploy"
+    "update": "git add . && git commit -m 'update' && git push origin main && npm run deploy"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
