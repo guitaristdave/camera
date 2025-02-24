@@ -3,7 +3,7 @@ import MyCamera from './components/MyCamera.vue';
 </script>
 
 <template>
-  <MyCamera title="Camera" />
+  <MyCamera/>
 </template>
 
 <style scoped>
