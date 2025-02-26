@@ -3,8 +3,7 @@
         <video ref="video" autoplay playsinline class="media" style="display: none;"></video>
         <canvas v-show="!photoCaptured" ref="videoCanvas" class="media"
             :class="{ mirror: isUserFacingCamera }"></canvas>
-        <canvas v-show="photoCaptured" ref="photoCanvas" class="media"
-            :class="{ mirror: isUserFacingCamera }"></canvas>
+        <canvas v-show="photoCaptured" ref="photoCanvas" class="media" :class="{ mirror: isUserFacingCamera }"></canvas>
         <div class="buttons">
             <div v-if="!photoCaptured" class="photo-buttons">
                 <button @click="capturePhoto" class="captureBtn">📸</button>
@@ -49,12 +48,23 @@ const startCamera = async () => {
     }
 };
 
-const capturePhoto = () => {
-    photoCaptured.value = true;
-    photoCanvas.value.width = video.value.videoWidth;
-    photoCanvas.value.height = video.value.videoHeight;
-    const ctx = photoCanvas.value.getContext('2d');
-    ctx.drawImage(video.value, 0, 0, photoCanvas.value.width, photoCanvas.value.height);
+const capturePhoto = async () => {
+    try {
+        const track = mediaStream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(track);
+
+        const blob = await imageCapture.takePhoto();
+
+        const imgBitmap = await createImageBitmap(blob);
+        
+        photoCaptured.value = true;
+        photoCanvas.value.width = video.value.videoWidth;
+        photoCanvas.value.height = video.value.videoHeight;
+        const ctx = photoCanvas.value.getContext('2d');
+        ctx.drawImage(imgBitmap, 0, 0);
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 const stopCamera = () => {
@@ -137,7 +147,7 @@ onUnmounted(() => stopCamera());
     gap: 20px;
     position: absolute;
     bottom: calc(50px + env(safe-area-inset-bottom, 0));
-    
+
 }
 
 .photo-buttons {
